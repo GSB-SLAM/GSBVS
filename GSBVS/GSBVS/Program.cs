@@ -8,12 +8,14 @@ namespace GSBVS
     {
         static void Main(string[] args)
         {
-            string visiteur = "visiteur";
-            List<string> visiteurs = new List<string>();
-            visiteurs.Add("id");
-            string n = SelectSql(visiteur, visiteurs);
+            string table = "etat";
+            List<string> colonnes = new List<string>();
+            string[] tab = { "id", "libelle" };
+            //colonnes.AddRange(tab);
+            colonnes.Add("id");
+            colonnes.Add("nom");
+            string n = SelectSql(table, colonnes);
             Console.WriteLine(n);
-            Console.WriteLine("Test");
             Console.ReadKey();
         }
     }

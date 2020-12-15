@@ -13,6 +13,7 @@ namespace GSBVS
             visiteurs.Add("id");
             string n = SelectSql(visiteur, visiteurs);
             Console.WriteLine(n);
+            Console.WriteLine("hey");
             Console.ReadKey();
         }
     }

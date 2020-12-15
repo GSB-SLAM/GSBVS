@@ -71,11 +71,11 @@ namespace GSBVS
         /// <param name="table"></param>
         /// <param name="colonnes"></param>
         /// <param name="valeurs"></param>
-        public static string InsertSql(string table,List<string> colonnes,List<string> valeurs)
+        public static string InsertSql(string table, List<string> colonnes, List<string> valeurs)
         {
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
-            string colonnesString="";
+            string colonnesString = "";
             if (colonnes.Count > 1)
             {
 
@@ -89,7 +89,7 @@ namespace GSBVS
             {
                 colonnesString += colonnes[0];
             }
-            string valeursString="";
+            string valeursString = "";
             if (valeurs.Count > 1)
             {
 
@@ -105,7 +105,7 @@ namespace GSBVS
             {
                 valeursString += valeurs[0];
             }
-            commande.CommandText = "INSERT INTO " + table + " (" + colonnesString + ") VALUES (" + valeursString+")";
+            commande.CommandText = "INSERT INTO " + table + " (" + colonnesString + ") VALUES (" + valeursString + ")";
             string n = "Les valeurs " + valeursString + " ont bien été ajoutées dans la table " + table;
             return n;
         }
@@ -119,7 +119,7 @@ namespace GSBVS
         /// <param name="table"></param>
         /// <param name="colonnes"></param>
         /// <param name="valeurs"></param>
-        public static string UpdateSql(string table,List<string> colonnes, List<string> valeurs)
+        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs)
         {
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
@@ -143,7 +143,7 @@ namespace GSBVS
                 colonnesvaleursString += colonnes[0] + "='" + valeurs[0] + "',";
             }
             commande.CommandText = "UPDATE " + table + " SET " + colonnesvaleursString;
-            string n = "La table "+table + " a bien été modifiée";
+            string n = "La table " + table + " a bien été modifiée";
             return n;
         }
         /// <summary>
@@ -160,7 +160,7 @@ namespace GSBVS
         /// <param name="valeurs"></param>
         /// <param name="colonneConditions"></param>
         /// <param name="valeurConditions"></param>
-        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs, List<string> colonneConditions,List<string> valeurConditions)
+        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs, List<string> colonneConditions, List<string> valeurConditions)
         {
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
@@ -178,7 +178,7 @@ namespace GSBVS
             }
             string whereString = "";
             string valeursString = "";
-            if (colonneConditions.Count > 1 && valeurConditions.Count==colonneConditions.Count)
+            if (colonneConditions.Count > 1 && valeurConditions.Count == colonneConditions.Count)
             {
                 for (int i = 0; i < colonneConditions.Count; i++)
                 {
@@ -195,11 +195,11 @@ namespace GSBVS
             }
             else
             {
-                valeursString += "'" + valeurConditions[0] +"'";
+                valeursString += "'" + valeurConditions[0] + "'";
                 whereString += " WHERE" + colonneConditions[0] + "=" + valeurConditions[0];
             }
             commande.CommandText = "UPDATE " + table + " SET " + whereString;
-            string n ="Les valeurs "+ valeursString +"de la table "+ table + " ont bien été modifiées";
+            string n = "Les valeurs " + valeursString + "de la table " + table + " ont bien été modifiées";
             return n;
         }
         /// <summary>
@@ -213,7 +213,7 @@ namespace GSBVS
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
             commande.CommandText = "DELETE FROM " + table;
-            string n = "La table" +table + " a bien été supprimée";
+            string n = "La table " + table + " a bien été supprimée";
             return n;
         }
         /// <summary>
@@ -230,8 +230,8 @@ namespace GSBVS
         {
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
-            commande.CommandText = "DELETE FROM " + table+" WHERE "+colonne+" = "+valeur;
-            string n = "La valeur "+valeur+" a bien été supprimée";
+            commande.CommandText = "DELETE FROM " + table + " WHERE " + colonne + " = " + valeur;
+            string n = "La valeur " + valeur + " de la table " + table + " a bien été supprimée";
             return n;
         }
         /// <summary>
@@ -262,8 +262,8 @@ namespace GSBVS
             commande.CommandText = "SELECT " + selectString + " FROM " + table;
 
             string requete = ReadRequetes(commande);
-            return requete;
             connexion.Close();
+            return requete;
         }
         /// <summary>
         /// Fonction qui permet de select dans la BD, surcharge de SelectSql mais avec une ou des conditions(where).
@@ -331,19 +331,19 @@ namespace GSBVS
         /// <param name="colonnes"></param>
         /// <param name="colonneConditions"></param>
         /// <param name="valeurConditions"></param>
-        public static string SelectSql(string[,] tables,List<string> tablesAmbigu, List<string> colonnes, List<string> colonneConditions, List<string> valeurConditions)
+        public static string SelectSql(string[,] tables, List<string> tablesAmbigu, List<string> colonnes, List<string> colonneConditions, List<string> valeurConditions)
         {
             MySqlConnection connexion = new MySqlConnection();
             MySqlCommand commande = connexion.CreateCommand();
             string selectString = "";
             if (colonnes.Count > 1)
             {
-                
+
                 for (int i = 0; i < colonnes.Count; i++)
                 {
                     if ((colonnes[i].Contains("id") || colonnes[i].Contains("mois")) && !colonnes[i].Contains("montantValide"))
                     {
-                        selectString += tablesAmbigu +"."+ colonnes[i] + ",";
+                        selectString += tablesAmbigu + "." + colonnes[i] + ",";
                     }
                     else
                     {
@@ -356,17 +356,17 @@ namespace GSBVS
                 selectString += colonnes[0];
             }
             string innerJoinString = "";
-            for(int i = 0; i < tables.Length; i++)
+            for (int i = 0; i < tables.Length; i++)
             {
                 if (i == 0)
                 {
-                    innerJoinString += tables[i,0];
+                    innerJoinString += tables[i, 0];
                 }
                 else
                 {
                     innerJoinString += tables[i, 0] + " INNER JOIN " + tables[i + 1, 0] + " ON " + tables[i, 0] + "." + tables[i, 1] + "=" + tables[i + 1, 0] + "." + tables[i + 1, 1];
                 }
-                
+
             }
             string whereString = "";
             if (colonneConditions.Count > 1 && valeurConditions == colonneConditions)

@@ -8,34 +8,29 @@ namespace GSBVS
     {
         static void Main(string[] args)
         {
-            string table = "etat";
-            List<string> colonnes = new List<string>();
-            string[] tab = { "id", "libelle" };
-            colonnes.AddRange(tab);
-            string n = SelectSql(table, colonnes);
-            Console.WriteLine(n);
+            //string tableSelect = "visiteur";
+            //List<string> colonnesSelect = new List<string>();
+            //string[] tabSelect = { "id", "nom", "prenom","dateembauche" };
+            //colonnesSelect.AddRange(tabSelect);
+            //List<string> colonnesConditions = new List<string>();
+            //List<string> valeurConditions = new List<string>();
+            //string[] tabSelectC = { "id", "nom" };
+            //string[] tabSelectV = { "'a100'", "'DeGaule'" };
+            //colonnesConditions.AddRange(tabSelectC);
+            //valeurConditions.AddRange(tabSelectV);
+            //string s = SelectSql(tableSelect, colonnesSelect, colonnesConditions, valeurConditions);
+            //Console.WriteLine(s);
+            //Console.ReadKey();
+
+            List<string> colonnesConditions = new List<string>();
+            List<string> valeursConditions = new List<string>();
+            string[] tabC = { "id", "nom", "prenom" };
+            string[] tabV = { "a100", "DeGaule", "Charles" };
+            colonnesConditions.AddRange(tabC);
+            valeursConditions.AddRange(tabV);
+            string r = Where(colonnesConditions,valeursConditions);
+            Console.WriteLine(r);
             Console.ReadKey();
-
-            //string table = "visiteur";
-            //List<string> colonnes = new List<string>();
-            //string[] tab = { "id", "nom", "prenom", "login", "mdp", "adresse", "cp", "ville", "dateembauche" };
-            //colonnes.AddRange(tab);
-            //string n = SelectSql(table, colonnes);
-            //Console.WriteLine(n);
-            //Console.ReadKey();
-
-            //string tableInsert = "visiteur";
-            //List<string> colonnesInsert = new List<string>();
-            //string[] tabInsert = { "id", "nom", "prenom" };
-            //colonnesInsert.AddRange(tabInsert);
-            //List<string> valeursInsert = new List<string>();
-            //string[] tab2Insert = { "a134", "villechak", "Luizsk" };
-            //valeursInsert.AddRange(tab2Insert);
-            //string l = InsertSql(tableInsert, colonnesInsert, valeursInsert);
-            //Console.WriteLine(l);
-            //Console.ReadKey();
-
-
         }
     }
 }

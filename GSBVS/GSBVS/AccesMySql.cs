@@ -212,9 +212,11 @@ namespace GSBVS
         public static string DeleteSql(string table)
         {
             MySqlConnection connexion = DBConnection();
+            OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             commande.CommandText = "DELETE FROM " + table;
             string n = "La table " +table + " a bien été supprimée";
+            CloseConnection(connexion);
             return n;
         }
         /// <summary>
@@ -230,10 +232,12 @@ namespace GSBVS
         public static string DeleteSql(string table, string colonne, string valeur)
         {
             MySqlConnection connexion = DBConnection();
+            OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             commande.CommandText = "DELETE FROM " + table+" WHERE "+colonne+" = "+valeur;
-            string n = "La valeur "+valeur+" de la table "+ table +" a bien été supprimée";
-            return n;
+            string delete = "La valeur "+valeur+" de la table "+ table +" a bien été supprimée";
+            CloseConnection(connexion);
+            return delete;
         }
         /// <summary>
         /// Fonction qui permet de select dans la BD
@@ -270,11 +274,13 @@ namespace GSBVS
         public static string SelectSql(string table, List<string> colonnes, List<string> colonneConditions, List<string> valeurConditions)
         {
             MySqlConnection connexion = DBConnection();
+            OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             string selectString = SelectColonnes(colonnes);
             string whereString = Where(colonneConditions, valeurConditions);
             commande.CommandText = "SELECT " + selectString + " FROM " + table + whereString;
             string requete = ReadRequetes(commande);
+            CloseConnection(connexion);
             return requete;
         }
         /// <summary>
@@ -294,9 +300,9 @@ namespace GSBVS
         public static string SelectSql(string[,] tables,List<string> tablesAmbigues, List<string> colonnes, List<string> colonneConditions, List<string> valeurConditions)
         {
             MySqlConnection connexion = DBConnection();
+            OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             string selectString = SelectColonnesAmbigues(colonnes,tablesAmbigues);
-            
             string innerJoinString = "";
             for(int i = 0; i < tables.Length; i++)
             {
@@ -308,12 +314,11 @@ namespace GSBVS
                 {
                     innerJoinString += tables[i, 0] + " INNER JOIN " + tables[i + 1, 0] + " ON " + tables[i, 0] + "." + tables[i, 1] + "=" + tables[i + 1, 0] + "." + tables[i + 1, 1];
                 }
-                
             }
             string whereString = Where(colonneConditions, valeurConditions);
-
             commande.CommandText = "SELECT " + selectString + " FROM " + innerJoinString + whereString;
             string requete = ReadRequetes(commande);
+            CloseConnection(connexion);
             return requete;
         }
         /// <summary>
@@ -322,7 +327,7 @@ namespace GSBVS
         /// </summary>
         /// <param name="commande"></param>
         /// <returns></returns>
-        private static string ReadRequetes(MySqlCommand commande)
+        protected static string ReadRequetes(MySqlCommand commande)
         {
             MySqlDataReader reader = commande.ExecuteReader();
             int y = 0;
@@ -350,7 +355,7 @@ namespace GSBVS
         /// <param name="colonnesConditions"></param>
         /// <param name="valeursConditions"></param>
         /// <returns></returns>
-        private static string Where(List<string> colonnesConditions, List<string> valeursConditions)
+        protected static string Where(List<string> colonnesConditions, List<string> valeursConditions)
         {
             string whereString = "";
             if (colonnesConditions.Count > 1 && valeursConditions.Count == colonnesConditions.Count)

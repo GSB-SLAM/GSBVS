@@ -136,5 +136,32 @@ namespace UnitTestGSBVS
                 "\n";
             Assert.AreEqual(selectCompare, select);
         }
+
+        [TestMethod]
+        public void TestReadRequetes()
+        {
+            MySqlConnection connexion = DBConnection();
+            OpenConnection(connexion);
+            MySqlCommand commande = connexion.CreateCommand();
+            commande.CommandText = "Select id,nom,prenom from visiteur where id='a100'";
+            string read = ReadRequetes(commande);
+            CloseConnection(connexion);
+            string readCompare = "a100\nDeGaule\nCharles\n-----------------------\n";
+            Assert.AreEqual(readCompare, read);
+        }
+
+        [TestMethod]
+        public void TestWhere()
+        {
+            List<string> colonnesConditions = new List<string>();
+            List<string> valeursConditions = new List<string>();
+            string[] tabC = { "id", "nom", "prenom" };
+            string[] tabV = { "a100", "DeGaule", "Charles" };
+            colonnesConditions.AddRange(tabC);
+            valeursConditions.AddRange(tabV);
+            string where = Where(colonnesConditions, valeursConditions);
+            string whereCompare = " WHERE id = a100 AND  WHERE nom = DeGaule AND  WHERE prenom = Charles";
+            Assert.AreEqual(whereCompare, where);
+        }
     }
 }

@@ -8,29 +8,34 @@ namespace GSBVS
     {
         static void Main(string[] args)
         {
+
+            //string s = SelectSql(tables, tablesAmbigues,colonnes,colonneConditions,valeurConditions,tablesAmibiguesConditions,distinct);
             //string tableSelect = "visiteur";
             //List<string> colonnesSelect = new List<string>();
-            //string[] tabSelect = { "id", "nom", "prenom","dateembauche" };
+            //string[] tabSelect = { "id", "nom", "prenom", "dateembauche" };
             //colonnesSelect.AddRange(tabSelect);
             //List<string> colonnesConditions = new List<string>();
             //List<string> valeurConditions = new List<string>();
             //string[] tabSelectC = { "id", "nom" };
-            //string[] tabSelectV = { "'a100'", "'DeGaule'" };
+            //string[] tabSelectV = { "a100", "DeGaule" };
+            //string distinct = "DISTINCT";
             //colonnesConditions.AddRange(tabSelectC);
             //valeurConditions.AddRange(tabSelectV);
-            //string s = SelectSql(tableSelect, colonnesSelect, colonnesConditions, valeurConditions);
+            //string s = SelectSql(tableSelect, colonnesSelect, colonnesConditions, valeurConditions,distinct);
             //Console.WriteLine(s);
             //Console.ReadKey();
 
-            List<string> colonnesConditions = new List<string>();
-            List<string> valeursConditions = new List<string>();
-            string[] tabC = { "id", "nom", "prenom" };
-            string[] tabV = { "a100", "DeGaule", "Charles" };
-            colonnesConditions.AddRange(tabC);
-            valeursConditions.AddRange(tabV);
-            string r = Where(colonnesConditions,valeursConditions);
-            Console.WriteLine(r);
-            Console.ReadKey();
+            //List<string> colonnesConditions = new List<string>();
+            //List<string> valeursConditions = new List<string>();
+            //string[] tabC = { "id", "nom", "prenom" };
+            //string[] tabV = { "a100", "DeGaule", "Charles" };
+            //colonnesConditions.AddRange(tabC);
+            //valeursConditions.AddRange(tabV);
+            //string r = Where(colonnesConditions,valeursConditions);
+            //Console.WriteLine(r);
+            //Console.ReadKey();
+
+
         }
     }
 }

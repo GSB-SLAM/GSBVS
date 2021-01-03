@@ -128,13 +128,33 @@ namespace UnitTestGSBVS
             List<string> colonnes = new List<string>();
             string[] tab = {"id", "libelle"};
             colonnes.AddRange(tab);
-            string select = SelectSql(table, colonnes);
+            string distinct = "";
+            string select = SelectSql(table, colonnes,distinct);
             string selectCompare = "CL\nSaisie clôturée\n" +
                 "-----------------------\nCR\nFiche créée, saisie en cours\n-----------------------\nMP\nMise en Paiement"
                 +
                 "\n-----------------------\nRB\nRemboursée\n-----------------------\nVA\nValidée\n-----------------------"+
                 "\n";
             Assert.AreEqual(selectCompare, select);
+        }
+
+        [TestMethod]
+        public void TestSelectSql2()
+        {
+            string table = "etat";
+            List<string> colonnes = new List<string>();
+            string[] tab = { "id", "libelle" };
+            colonnes.AddRange(tab);
+            string distinct = "";
+            List<string> colonneConditions = new List<string>();
+            List<string> valeurConditions = new List<string>();
+            string[] tabC = { "id", "libelle" };
+            string[] tabV = { "MP", "Mise en Paiement" };
+            colonneConditions.AddRange(tabC);
+            valeurConditions.AddRange(tabV);
+            string select = SelectSql(table, colonnes, colonneConditions, valeurConditions, distinct);
+            string selectCompare = "MP\nMise en Paiement\n-----------------------\n";
+            Assert.AreEqual(selectCompare,select);
         }
 
         [TestMethod]
@@ -160,7 +180,7 @@ namespace UnitTestGSBVS
             colonnesConditions.AddRange(tabC);
             valeursConditions.AddRange(tabV);
             string where = Where(colonnesConditions, valeursConditions);
-            string whereCompare = " WHERE id = a100 AND  WHERE nom = DeGaule AND  WHERE prenom = Charles";
+            string whereCompare = " WHERE id = 'a100' AND nom = 'DeGaule' AND prenom = 'Charles'";
             Assert.AreEqual(whereCompare, where);
         }
     }

@@ -88,12 +88,12 @@ namespace GSBVS
         /// <param name="table"></param>
         /// <param name="colonnes"></param>
         /// <param name="valeurs"></param>
-        public static string InsertSql(string table,List<string> colonnes,List<string> valeurs)
+        public static string InsertSql(string table, List<string> colonnes, List<string> valeurs)
         {
             MySqlConnection connexion = DBConnection();
             OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
-            string colonnesString="";
+            string colonnesString = "";
             if (colonnes.Count > 1)
             {
 
@@ -114,7 +114,7 @@ namespace GSBVS
             {
                 colonnesString += colonnes[0];
             }
-            string valeursString="";
+            string valeursString = "";
             if (valeurs.Count > 1)
             {
 
@@ -130,7 +130,7 @@ namespace GSBVS
             {
                 valeursString += valeurs[0];
             }
-            commande.CommandText = "INSERT INTO " + table + " (" + colonnesString + ") VALUES (" + valeursString+")";
+            commande.CommandText = "INSERT INTO " + table + " (" + colonnesString + ") VALUES (" + valeursString + ")";
             string n = "Les valeurs " + valeursString + " ont bien été ajoutées dans la table " + table;
             commande.ExecuteReader();
             CloseConnection(connexion);
@@ -146,7 +146,7 @@ namespace GSBVS
         /// <param name="table"></param>
         /// <param name="colonnes"></param>
         /// <param name="valeurs"></param>
-        public static string UpdateSql(string table,List<string> colonnes, List<string> valeurs)
+        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs)
         {
             MySqlConnection connexion = DBConnection();
             OpenConnection(connexion);
@@ -160,7 +160,7 @@ namespace GSBVS
                     {
                         if (i == colonnes.Count - 1)
                         {
-                            colonnesvaleursString += colonnes[i] + "='" + valeurs[i] +"'";
+                            colonnesvaleursString += colonnes[i] + "='" + valeurs[i] + "'";
                         }
                         else
                         {
@@ -178,7 +178,7 @@ namespace GSBVS
                 colonnesvaleursString += colonnes[0] + "='" + valeurs[0] + "',";
             }
             commande.CommandText = "UPDATE " + table + " SET " + colonnesvaleursString;
-            string n = "La table "+table + " a bien été modifiée";
+            string n = "La table " + table + " a bien été modifiée";
             commande.ExecuteReader();
             CloseConnection(connexion);
             return n;
@@ -197,7 +197,7 @@ namespace GSBVS
         /// <param name="valeurs"></param>
         /// <param name="colonneConditions"></param>
         /// <param name="valeurConditions"></param>
-        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs, List<string> colonneConditions,List<string> valeurConditions)
+        public static string UpdateSql(string table, List<string> colonnes, List<string> valeurs, List<string> colonneConditions, List<string> valeurConditions)
         {
             MySqlConnection connexion = DBConnection();
             OpenConnection(connexion);
@@ -214,9 +214,9 @@ namespace GSBVS
             {
                 throw new Exception();
             }
-            string whereString = Where(colonneConditions,valeurConditions);
+            string whereString = Where(colonneConditions, valeurConditions);
             commande.CommandText = "UPDATE " + table + " SET " + whereString;
-            string n ="Les valeurs de la table "+ table + " ont bien été modifiées";
+            string n = "Les valeurs de la table " + table + " ont bien été modifiées";
             CloseConnection(connexion);
             return n;
         }
@@ -232,7 +232,7 @@ namespace GSBVS
             OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             commande.CommandText = "DELETE FROM " + table;
-            string n = "La table " +table + " a bien été supprimée";
+            string n = "La table " + table + " a bien été supprimée";
             CloseConnection(connexion);
             return n;
         }
@@ -251,8 +251,8 @@ namespace GSBVS
             MySqlConnection connexion = DBConnection();
             OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
-            commande.CommandText = "DELETE FROM " + table+" WHERE "+colonne+" = "+valeur;
-            string delete = "La valeur "+valeur+" de la table "+ table +" a bien été supprimée";
+            commande.CommandText = "DELETE FROM " + table + " WHERE " + colonne + " = " + valeur;
+            string delete = "La valeur " + valeur + " de la table " + table + " a bien été supprimée";
             CloseConnection(connexion);
             return delete;
         }
@@ -272,7 +272,7 @@ namespace GSBVS
             string selectString = SelectColonnes(colonnes);
             if (distinct != "")
             {
-                commande.CommandText = "SELECT " +distinct + " " + selectString + " FROM " + table;
+                commande.CommandText = "SELECT " + distinct + " " + selectString + " FROM " + table;
             }
             else
             {
@@ -303,7 +303,7 @@ namespace GSBVS
             string whereString = Where(colonneConditions, valeurConditions);
             if (distinct != "")
             {
-                commande.CommandText = "SELECT " +distinct+" "+ selectString + " FROM " + table + whereString;
+                commande.CommandText = "SELECT " + distinct + " " + selectString + " FROM " + table + whereString;
             }
             else
             {
@@ -316,92 +316,83 @@ namespace GSBVS
         /// <summary>
         /// Fonction qui permet de select dans la BD, surcharge de SelectSql mais avec une ou plusieurs jointures(inner join) et une ou plusieurs conditions(where).
         /// Condition d'utilisation des paramètres:
-        /// tables:tableau de string des tables et des id utilisées dans le select (et les inner join).
-        /// tablesAmbigu:Liste de string dans qui contient les tables à entrer pour éviter des erreurs d'ambiguïté.
+        /// tables:Liste de string des tables utilisées dans le select (et les inner join). Modèle : TableTable (la première à laquelle on inner join la deuxième).
+        /// tablesAmbigues:Liste de string dans qui contient les tables à entrer pour éviter des erreurs d'ambiguïté.
         /// colonnes:Liste de string des colonnes qu'on veut select.
         /// colonneConditions:Liste de string qui contient la ou les colonnes qu'on entre en condition dans le where.
         /// valeurConditions:Liste de string qui contient la ou les valeurs qu'on entre en condition dans le where
+        /// tablesAmbiguesConditions:Liste de string qui contient la ou les tables pour lesquelles il peut y avoir des ambiguités de clé primaire
         /// </summary>
         /// <param name="tables"></param>
-        /// <param name="tablesAmbigu"></param>
+        /// <param name="tablesAmbigues"></param>
         /// <param name="colonnes"></param>
         /// <param name="colonneConditions"></param>
         /// <param name="valeurConditions"></param>
-        public static string SelectSql(string[] tables, List<string> tablesAmbigues, List<string> colonnes, List<string> colonneConditions,
+        /// <param name="tablesAmbiguesConditions"></param>
+        public static string SelectSql(string tableFrom, List<string> tables, List<string> tablesAmbigues, List<string> colonnes, List<string> colonneConditions,
             List<string> valeurConditions, List<string> tablesAmbiguesConditions, string distinct)
         {
             MySqlConnection connexion = DBConnection();
             OpenConnection(connexion);
             MySqlCommand commande = connexion.CreateCommand();
             string selectString = SelectColonnesAmbigues(colonnes, tablesAmbigues);
-            string innerJoinString = "";
-            for (int i = 0; i < tables.Length; i++)
+            string innerJoinString = tableFrom;
+            for (int i = 0; i < tables.Count; i++)
             {
-                //if (i == 0)
-                //{
-                //    innerJoinString += tables[i,0];
-                //}
-                //else
-                //{
-                //    innerJoinString += tables[i, 0] + " INNER JOIN " + tables[i + 1, 0] + " ON " + tables[i, 0] + "." + tables[i, 1] + "=" + tables[i + 1, 0] + "." + tables[i + 1, 1];
-                //}
-                
                 switch (tables[i])
                 {
 
                     case innerJoinVisiteurFicheFrais:
-                        innerJoinString += "visiteur INNER JOIN fichefrais on visiteur.id=fichefrais.idvisiteur";
+                        innerJoinString += " INNER JOIN fichefrais on visiteur.id=fichefrais.idvisiteur ";
                         break;
                     case innerJoinVisiteurLigneFraisForfait:
-                        innerJoinString += "visiteur INNER JOIN lignefraisforfait on visiteur.id=lignefraisforfait.idvisiteur";
+                        innerJoinString += " INNER JOIN lignefraisforfait on visiteur.id=lignefraisforfait.idvisiteur ";
                         break;
                     case innerJoinVisiteurLigneFraisHorsForfait:
-                        innerJoinString += "visiteur INNER JOIN lignefraishorsforfait on visiteur.id=lignefraishorsforfait.idvisiteur";
+                        innerJoinString += " INNER JOIN lignefraishorsforfait on visiteur.id=lignefraishorsforfait.idvisiteur ";
                         break;
                     case innerJoinFraisForfaitLigneFraisForfait:
-                        innerJoinString += "fraisforfait INNER JOIN lignefraisforfait on fraisforfait.id=lignefraisforfait.idfraisforfait";
+                        innerJoinString += " INNER JOIN lignefraisforfait on fraisforfait.id=lignefraisforfait.idfraisforfait ";
                         break;
                     case innerJoinFicheFraisEtat:
-                        innerJoinString += "fichefrais INNER JOIN etat on fichefrais.idetat=etat.id";
+                        innerJoinString += " INNER JOIN etat on fichefrais.idetat=etat.id ";
                         break;
                     case innerJoinFicheFraisTypeVehicule:
-                        innerJoinString += "fichefrais INNER JOIN typevehicule on fichefrais.idtypevehicule=typevehicule.id";
+                        innerJoinString += " INNER JOIN typevehicule on fichefrais.idtypevehicule=typevehicule.id ";
                         break;
                     case innerJoinFicheFraisLigneFraisForfait:
-                        innerJoinString += "fichefrais INNER JOIN lignefraisforfait on fichefrais.mois=lignefraisforfait.mois";
+                        innerJoinString += " INNER JOIN lignefraisforfait on fichefrais.mois=lignefraisforfait.mois ";
                         break;
                     case innerJoinFicheFraisLigneFraisHorsForfait:
-                        innerJoinString += "fichefrais INNER JOIN lignefraishorsforfait on fichefrais.mois=lignefraishorsforfait.mois";
+                        innerJoinString += " INNER JOIN lignefraishorsforfait on fichefrais.mois=lignefraishorsforfait.mois ";
                         break;
                     case innerJoinFicheFraisVisiteur:
-                        innerJoinString += "fichefrais INNER JOIN visiteur on fichefrais.idvisiteur=visiteur.id";
+                        innerJoinString += " INNER JOIN visiteur on fichefrais.idvisiteur=visiteur.id ";
                         break;
                     case innerJoinLigneFraisForfaitVisiteur:
-                        innerJoinString += "lignefraisforfait INNER JOIN visiteur on lignefraisforfait.idvisiteur=visiteur.id";
+                        innerJoinString += " INNER JOIN visiteur on lignefraisforfait.idvisiteur=visiteur.id ";
                         break;
                     case innerJoinLigneFraisHorsForfaitVisiteur:
-                        innerJoinString += "lignefraishorsforfait INNER JOIN visiteur on lignefraishorsforfait.idvisiteur=visiteur.id";
+                        innerJoinString += " INNER JOIN visiteur on lignefraishorsforfait.idvisiteur=visiteur.id ";
                         break;
                     case innerJoinEtatFicheFrais:
-                        innerJoinString += "etat INNER JOIN fiche frais on etat.id=fichefrais.idetat";
+                        innerJoinString += " INNER JOIN fiche frais on etat.id=fichefrais.idetat ";
                         break;
                     case innerJoinTypeVehiculeFicheFrais:
-                        innerJoinString += "typevehicule INNER JOIN fichefrais on typevehicule.id=fichefrais.idtypevehicule";
+                        innerJoinString += " INNER JOIN fichefrais on typevehicule.id=fichefrais.idtypevehicule ";
                         break;
                     case innerJoinLigneFraisForfaitFicheFrais:
-                        innerJoinString += "lignefraisforfait INNER JOIN fichefrais on lignefraisforfait.mois=fichefrais.mois";
+                        innerJoinString += " INNER JOIN fichefrais on lignefraisforfait.mois=fichefrais.mois ";
                         break;
                     case innerJoinLigneFraisHorsForfaitFicheFrais:
-                        innerJoinString += "lignefraishorsforfait INNER JOIN fichefrais on lignefraishorsforfait.mois=fichefrais.mois";
+                        innerJoinString += " INNER JOIN fichefrais on lignefraishorsforfait.mois=fichefrais.mois ";
                         break;
-
-
                 }
             }
             string whereString = Where(colonneConditions, valeurConditions, tablesAmbiguesConditions);
             if (distinct != "")
             {
-                commande.CommandText = "SELECT "+distinct +" "+ selectString + " FROM " + innerJoinString + whereString;
+                commande.CommandText = "SELECT " + distinct + " " + selectString + " FROM " + innerJoinString + whereString;
             }
             else
             {
@@ -426,7 +417,7 @@ namespace GSBVS
             while (reader.Read())
             {
                 y = 0;
-                for(int i = 0; i < reader.FieldCount; i++)
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
                     requete += reader.GetString(y).ToString() + "\n";
                     y++;
@@ -453,17 +444,17 @@ namespace GSBVS
                 {
                     if (i == colonnesConditions.Count - 1)
                     {
-                        whereString +=colonnesConditions[i] + " = " + "'" +valeursConditions[i]+ "'";
+                        whereString += colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'";
                     }
                     else
                     {
-                        whereString +=colonnesConditions[i] + " = " + "'"+valeursConditions[i]+"'" + " AND ";
+                        whereString += colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'" + " AND ";
                     }
                 }
             }
             else
             {
-                whereString += " WHERE " + colonnesConditions[0] + "=" +"'"+ valeursConditions[0]+"'";
+                whereString += " WHERE " + colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
             }
             return whereString;
         }
@@ -487,32 +478,39 @@ namespace GSBVS
                     {
                         if (i == colonnesConditions.Count - 1)
                         {
-                            whereString += tablesAmbiguesConditions[cpt] + colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'";
+                            whereString += tablesAmbiguesConditions[cpt] + "." + colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'";
                             cpt++;
                         }
                         else
                         {
-                            whereString += tablesAmbiguesConditions[cpt] + colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'" + " AND ";
+                            whereString += tablesAmbiguesConditions[cpt] + "." + colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'" + " AND ";
                             cpt++;
                         }
-                     
+
                     }
                     else
                     {
                         if (i == colonnesConditions.Count - 1)
                         {
-                            whereString +=colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'";
+                            whereString += colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'";
                         }
                         else
                         {
-                            whereString +=colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'" + " AND ";
+                            whereString += colonnesConditions[i] + " = " + "'" + valeursConditions[i] + "'" + " AND ";
                         }
                     }
                 }
             }
             else
             {
-                whereString += " WHERE " + colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
+                if ((colonnesConditions[0].Contains("id") || colonnesConditions[0].Contains("mois")) && !colonnesConditions[0].Contains("montantValide"))
+                {
+                    whereString += tablesAmbiguesConditions[0] + "." + colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
+                }
+                else
+                {
+                    whereString += colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
+                }
             }
             return whereString;
         }
@@ -555,7 +553,7 @@ namespace GSBVS
         /// <param name="colonnes"></param>
         /// <param name="tablesAmbigues"></param>
         /// <returns></returns>
-        private static string SelectColonnesAmbigues(List<string> colonnes,List<string> tablesAmbigues)
+        private static string SelectColonnesAmbigues(List<string> colonnes, List<string> tablesAmbigues)
         {
             string selectString = "";
             int cpt = 0;
@@ -566,12 +564,27 @@ namespace GSBVS
                 {
                     if ((colonnes[i].Contains("id") || colonnes[i].Contains("mois")) && !colonnes[i].Contains("montantValide"))
                     {
-                        selectString += tablesAmbigues[cpt] + "." + colonnes[i] + ",";
-                        cpt++;
+                        if (i == colonnes.Count - 1)
+                        {
+                            selectString += tablesAmbigues[cpt] + "." + colonnes[i];
+                            cpt++;
+                        }
+                        else
+                        {
+                            selectString += tablesAmbigues[cpt] + "." + colonnes[i] + ",";
+                            cpt++;
+                        }
                     }
                     else
                     {
-                        selectString += colonnes[i] + ",";
+                        if (i == colonnes.Count - 1)
+                        {
+                            selectString += colonnes[i];
+                        }
+                        else
+                        {
+                            selectString += colonnes[i] + ",";
+                        }
                     }
                 }
             }

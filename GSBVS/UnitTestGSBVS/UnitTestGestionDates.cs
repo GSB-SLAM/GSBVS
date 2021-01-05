@@ -11,25 +11,25 @@ namespace UnitTestGSBVS
         public void TestGetMoisPrecedent()
         {
             string n = GetMoisPrecedent();
-            Assert.AreEqual(n, "11");
+            Assert.AreEqual(n, "12");
         }
         [TestMethod]
         public void TestGetMoisPrecedentPara()
         {
             string n = GetMoisPrecedent(DateTime.Today);
-            Assert.AreEqual(n, "11");
+            Assert.AreEqual(n, "12");
         }
         [TestMethod]
         public void TestGetMoisSuivant()
         {
             string n = GetMoisSuivant();
-            Assert.AreEqual(n, "01");
+            Assert.AreEqual(n, "02");
         }
         [TestMethod]
         public void TestGetMoisSuivantPara()
         {
             string n = GetMoisSuivant(DateTime.Today);
-            Assert.AreEqual(n, "01");
+            Assert.AreEqual(n, "02");
         }
         [TestMethod]
         public void EntreDates2Para()
@@ -46,7 +46,7 @@ namespace UnitTestGSBVS
             DateTime today = DateTime.Today;
             DateTime yesterday = today.AddDays(-1);
             DateTime tomorrow = today.AddDays(1);
-            bool b = EntreDates(yesterday,today, tomorrow);
+            bool b = EntreDates(yesterday, today, tomorrow);
             Assert.AreEqual(b, true);
         }
     }

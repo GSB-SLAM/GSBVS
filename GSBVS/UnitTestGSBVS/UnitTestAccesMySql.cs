@@ -74,7 +74,7 @@ namespace UnitTestGSBVS
             colonnesUpdate.AddRange(tabUpdate);
             valeursUpdate.AddRange(tab2Update);
             string update = UpdateSql(tableUpdate, colonnesUpdate, valeursUpdate);
-            string updateCompare ="La table visiteur a bien été modifiée";
+            string updateCompare = "La table visiteur a bien été modifiée";
             Assert.AreEqual(updateCompare, update);
         }
 
@@ -97,7 +97,7 @@ namespace UnitTestGSBVS
             valeursConditions.Add("a100");
             valeursConditions.Add("DeGaule");
             valeursConditions.Add("Charles");
-            string update = UpdateSql("Visiteur", colonnes, valeurs,colonnesConditions,valeursConditions);
+            string update = UpdateSql("Visiteur", colonnes, valeurs, colonnesConditions, valeursConditions);
             string updateCompare = "Les valeurs de la table Visiteur ont bien été modifiées";
             Assert.AreEqual(updateCompare, update);
         }
@@ -126,14 +126,14 @@ namespace UnitTestGSBVS
         {
             string table = "etat";
             List<string> colonnes = new List<string>();
-            string[] tab = {"id", "libelle"};
+            string[] tab = { "id", "libelle" };
             colonnes.AddRange(tab);
             string distinct = "";
-            string select = SelectSql(table, colonnes,distinct);
+            string select = SelectSql(table, colonnes, distinct);
             string selectCompare = "CL\nSaisie clôturée\n" +
                 "-----------------------\nCR\nFiche créée, saisie en cours\n-----------------------\nMP\nMise en Paiement"
                 +
-                "\n-----------------------\nRB\nRemboursée\n-----------------------\nVA\nValidée\n-----------------------"+
+                "\n-----------------------\nRB\nRemboursée\n-----------------------\nVA\nValidée\n-----------------------" +
                 "\n";
             Assert.AreEqual(selectCompare, select);
         }
@@ -154,7 +154,36 @@ namespace UnitTestGSBVS
             valeurConditions.AddRange(tabV);
             string select = SelectSql(table, colonnes, colonneConditions, valeurConditions, distinct);
             string selectCompare = "MP\nMise en Paiement\n-----------------------\n";
-            Assert.AreEqual(selectCompare,select);
+            Assert.AreEqual(selectCompare, select);
+        }
+
+        [TestMethod]
+        public void TestSelectSql3()
+        {
+            List<string> tables = new List<string>();
+            List<string> tablesAmbigues = new List<string>();
+            List<string> colonnes = new List<string>();
+            List<string> colonneConditions = new List<string>();
+            List<string> valeurConditions = new List<string>();
+            List<string> tablesAmbiguesConditions = new List<string>();
+            string[] table = { "VisiteurFicheFrais", "FicheFraisEtat" };
+            string[] tableAmbigue = { "visiteur" };
+            string[] colonne = { "id", "nom", "prenom" };
+            string[] colonneCondition = { "id" };
+            string[] valeurCondition = { "CL" };
+            string[] tableAmbigueCondition = { "etat" };
+            tables.AddRange(table);
+            tablesAmbigues.AddRange(tableAmbigue);
+            colonnes.AddRange(colonne);
+            colonneConditions.AddRange(colonneCondition);
+            valeurConditions.AddRange(valeurCondition);
+            tablesAmbiguesConditions.AddRange(tableAmbigueCondition);
+            string distinct = "DISTINCT";
+            string tableFrom = "visiteur";
+            string select = SelectSql(tableFrom, tables, tablesAmbigues, colonnes, colonneConditions, valeurConditions, tablesAmbiguesConditions, distinct);
+            string selectCompare = "a131\nVillechalane\nLouis\n-----------------------\n";
+            Assert.AreEqual(selectCompare, select);
+
         }
 
         [TestMethod]

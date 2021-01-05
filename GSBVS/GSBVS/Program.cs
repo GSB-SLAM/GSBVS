@@ -8,8 +8,29 @@ namespace GSBVS
     {
         static void Main(string[] args)
         {
-
-            //string s = SelectSql(tables, tablesAmbigues,colonnes,colonneConditions,valeurConditions,tablesAmibiguesConditions,distinct);
+            List<string> tables = new List<string>();
+            List<string> tablesAmbigues = new List<string>();
+            List<string> colonnes = new List<string>();
+            List<string> colonneConditions = new List<string>();
+            List<string> valeurConditions = new List<string>();
+            List<string> tablesAmbiguesConditions = new List<string>();
+            string[] table = { "VisiteurFicheFrais", "FicheFraisEtat" };
+            string[] tableAmbigue = { "visiteur" };
+            string[] colonne = { "id", "nom", "prenom" };
+            string[] colonneCondition = { "id" };
+            string[] valeurCondition = { "CL" };
+            string[] tableAmbigueCondition = { "etat" };
+            tables.AddRange(table);
+            tablesAmbigues.AddRange(tableAmbigue);
+            colonnes.AddRange(colonne);
+            colonneConditions.AddRange(colonneCondition);
+            valeurConditions.AddRange(valeurCondition);
+            tablesAmbiguesConditions.AddRange(tableAmbigueCondition);
+            string distinct = "DISTINCT";
+            string tableFrom = "visiteur";
+            string s = SelectSql(tableFrom, tables, tablesAmbigues, colonnes, colonneConditions, valeurConditions, tablesAmbiguesConditions, distinct);
+            Console.WriteLine(s);
+            Console.ReadKey();
             //string tableSelect = "visiteur";
             //List<string> colonnesSelect = new List<string>();
             //string[] tabSelect = { "id", "nom", "prenom", "dateembauche" };

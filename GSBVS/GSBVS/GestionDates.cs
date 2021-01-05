@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GSBVS
 {
-    public abstract class GestionDates
+    public class GestionDates
     {
         /// <summary>
         /// Fonction qui retourne vrai si le jour actuel est entre les deux dates entrées 
@@ -13,7 +13,7 @@ namespace GSBVS
         /// <param name="premierJour"></param>
         /// <param name="deuxiemeJour"></param>
         /// <returns></returns>
-        public static bool EntreDates(DateTime premierJour, DateTime deuxiemeJour)
+        public bool EntreDates(DateTime premierJour, DateTime deuxiemeJour)
         {
             DateTime today = DateTime.Today;
             if (premierJour < today && today < deuxiemeJour)
@@ -35,7 +35,7 @@ namespace GSBVS
         /// <param name="dateTestee"></param>
         /// <param name="deuxiemeJour"></param>
         /// <returns></returns>
-        public static bool EntreDates(DateTime premierJour, DateTime dateTestee, DateTime deuxiemeJour)
+        public bool EntreDates(DateTime premierJour, DateTime dateTestee, DateTime deuxiemeJour)
         {
             if (premierJour < dateTestee && dateTestee < deuxiemeJour)
             {
@@ -51,7 +51,7 @@ namespace GSBVS
         /// Fonction qui retourne le mois précédent de la date actuelle sous forme mm.
         /// </summary>
         /// <returns></returns>
-        public static string GetMoisPrecedent()
+        public string GetMoisPrecedent()
         {
             DateTime today = DateTime.Today;
             DateTime moisPrecedentDateTime = today.AddMonths(-1);
@@ -64,7 +64,7 @@ namespace GSBVS
         /// </summary>
         /// <param name="dateTesteeDateTime"></param>
         /// <returns></returns>
-        public static string GetMoisPrecedent(DateTime dateTesteeDateTime)
+        public string GetMoisPrecedent(DateTime dateTesteeDateTime)
         {
             DateTime moisPrecedentDateTime = dateTesteeDateTime.AddMonths(-1);
             string mois = ConvertMoisToString(moisPrecedentDateTime);
@@ -75,7 +75,7 @@ namespace GSBVS
         /// Fonction qui retourne le mois suivant de la date actuelle sous forme mm.
         /// </summary>
         /// <returns></returns>
-        public static string GetMoisSuivant()
+        public string GetMoisSuivant()
         {
             DateTime today = DateTime.Today;
             DateTime moisSuivantDateTime = today.AddMonths(1);
@@ -88,7 +88,7 @@ namespace GSBVS
         /// </summary>
         /// <param name="dateTesteeDateTime"></param>
         /// <returns></returns>
-        public static string GetMoisSuivant(DateTime dateTesteeDateTime)
+        public string GetMoisSuivant(DateTime dateTesteeDateTime)
         {
             DateTime moisSuivantDateTime = dateTesteeDateTime.AddMonths(1);
             string mois = ConvertMoisToString(moisSuivantDateTime);
@@ -101,7 +101,7 @@ namespace GSBVS
         /// </summary>
         /// <param name="dateTestee"></param>
         /// <returns></returns>
-        public static string ConvertMoisToString(DateTime dateTestee)
+        public string ConvertMoisToString(DateTime dateTestee)
         {
             string date = Convert.ToString(dateTestee);
             string mois = Convert.ToString(date[3]) + Convert.ToString(date[4]);

@@ -8,55 +8,78 @@ namespace GSBVS
     {
         static void Main(string[] args)
         {
-            List<string> tables = new List<string>();
-            List<string> tablesAmbigues = new List<string>();
-            List<string> colonnes = new List<string>();
-            List<string> colonneConditions = new List<string>();
-            List<string> valeurConditions = new List<string>();
-            List<string> tablesAmbiguesConditions = new List<string>();
-            string[] table = { "VisiteurFicheFrais", "FicheFraisEtat" };
-            string[] tableAmbigue = { "visiteur" };
-            string[] colonne = { "id", "nom", "prenom" };
-            string[] colonneCondition = { "id" };
-            string[] valeurCondition = { "CL" };
-            string[] tableAmbigueCondition = { "etat" };
-            tables.AddRange(table);
-            tablesAmbigues.AddRange(tableAmbigue);
-            colonnes.AddRange(colonne);
-            colonneConditions.AddRange(colonneCondition);
-            valeurConditions.AddRange(valeurCondition);
-            tablesAmbiguesConditions.AddRange(tableAmbigueCondition);
-            string distinct = "DISTINCT";
-            string tableFrom = "visiteur";
-            string s = SelectSql(tableFrom, tables, tablesAmbigues, colonnes, colonneConditions, valeurConditions, tablesAmbiguesConditions, distinct);
-            Console.WriteLine(s);
-            Console.ReadKey();
-            //string tableSelect = "visiteur";
-            //List<string> colonnesSelect = new List<string>();
-            //string[] tabSelect = { "id", "nom", "prenom", "dateembauche" };
-            //colonnesSelect.AddRange(tabSelect);
-            //List<string> colonnesConditions = new List<string>();
-            //List<string> valeurConditions = new List<string>();
-            //string[] tabSelectC = { "id", "nom" };
-            //string[] tabSelectV = { "a100", "DeGaule" };
-            //string distinct = "DISTINCT";
-            //colonnesConditions.AddRange(tabSelectC);
-            //valeurConditions.AddRange(tabSelectV);
-            //string s = SelectSql(tableSelect, colonnesSelect, colonnesConditions, valeurConditions,distinct);
-            //Console.WriteLine(s);
-            //Console.ReadKey();
-
-            //List<string> colonnesConditions = new List<string>();
-            //List<string> valeursConditions = new List<string>();
-            //string[] tabC = { "id", "nom", "prenom" };
-            //string[] tabV = { "a100", "DeGaule", "Charles" };
-            //colonnesConditions.AddRange(tabC);
-            //valeursConditions.AddRange(tabV);
-            //string r = Where(colonnesConditions,valeursConditions);
-            //Console.WriteLine(r);
-            //Console.ReadKey();
-
-
+            GestionDates date = new GestionDates();
+            DateTime today = DateTime.Today;
+            string premiereDateString = "01/" + today.Month + "/" + today.Year;
+            DateTime premiereDate = Convert.ToDateTime(premiereDateString);
+            string deuxiemeDateString = "10/" + today.Month + "/" + today.Year;
+            DateTime deuxiemeDate = Convert.ToDateTime(deuxiemeDateString);
+            if (date.EntreDates(premiereDate, deuxiemeDate))
+            {
+                string table = "fichefrais";
+                List<string> colonnes = new List<string>();
+                string[] tabColonnes = { "idetat" };
+                colonnes.AddRange(tabColonnes);
+                List<string> valeurs = new List<string>();
+                string[] tabValeurs = { "CL" };
+                valeurs.AddRange(tabValeurs);
+                List<string> colonneConditions = new List<string>();
+                string[] tabColonnesConditions = { "mois" };
+                colonneConditions.AddRange(tabColonnesConditions);
+                List<string> valeurConditions = new List<string>();
+                string moisPrecedent = "";
+                if (date.GetMoisPrecedent(DateTime.Now) == "12")
+                {
+                    moisPrecedent += today.Year - 1 + date.GetMoisPrecedent(DateTime.Now);
+                }
+                else
+                {
+                    moisPrecedent += today.Year + date.GetMoisPrecedent(DateTime.Now);
+                }
+                string[] tabValeursConditions = { moisPrecedent };
+                valeurConditions.AddRange(tabValeursConditions);
+                string update = UpdateSql(table, colonnes, valeurs, colonneConditions, valeurConditions);
+            }
+            string troisièmeDateString = "20/" + today.Month + "/" + today.Year;
+            DateTime troisiemeDate = Convert.ToDateTime(troisièmeDateString);
+            int cpt = 1;
+            string quatriemeDateString = "";
+            if (today.Month == 01 || today.Month == 03 || today.Month == 05 || today.Month == 07 || today.Month == 08 || today.Month == 10 || today.Month == 12) 
+            {
+                quatriemeDateString += "31/"+today.Month+"/"+today.Year;
+            }
+            else if(today.Month == 02 && cpt%4!=0)
+            {
+                quatriemeDateString += "28/" + today.Month + "/" + today.Year;
+                cpt++;
+            }
+            else if(today.Month == 02 && cpt % 4 == 0)
+            {
+                quatriemeDateString += "29/" + today.Month + "/" + today.Year;
+                cpt++;
+            }
+            else
+            {
+                quatriemeDateString += "31/" + today.Month + "/" + today.Year;
+            }
+            DateTime quatiemeDate = Convert.ToDateTime(quatriemeDateString);
+            if (date.EntreDates(troisiemeDate, quatiemeDate))
+            {
+                string table = "fichefrais";
+                List<string> colonnes = new List<string>();
+                string[] tabColonnes = { "idetat" };
+                colonnes.AddRange(tabColonnes);
+                List<string> valeurs = new List<string>();
+                string[] tabValeurs = { "RB" };
+                valeurs.AddRange(tabValeurs);
+                List<string> colonneConditions = new List<string>();
+                string[] tabColonnesConditions = { "idetat" };
+                colonneConditions.AddRange(tabColonnesConditions);
+                List<string> valeurConditions = new List<string>();
+                string[] tabValeursConditions = { "VA" };
+                valeurConditions.AddRange(tabValeursConditions);
+                string update = UpdateSql(table, colonnes, valeurs, colonneConditions, valeurConditions);
+            }
         }
     }
 }

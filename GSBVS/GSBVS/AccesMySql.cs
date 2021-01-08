@@ -207,7 +207,14 @@ namespace GSBVS
             {
                 for (int i = 0; i < colonnes.Count; i++)
                 {
-                    colonnesvaleursString += colonnes[i] + "='" + valeurs[i] + "',";
+                    if (i == colonnes.Count - 1)
+                    {
+                        colonnesvaleursString += colonnes[i] + "='" + valeurs[i]+ "'";
+                    }
+                    else
+                    {
+                        colonnesvaleursString += colonnes[i] + "='" + valeurs[i] + "',";
+                    }
                 }
             }
             else
@@ -215,7 +222,10 @@ namespace GSBVS
                 throw new Exception();
             }
             string whereString = Where(colonneConditions, valeurConditions);
-            commande.CommandText = "UPDATE " + table + " SET " + whereString;
+            commande.CommandText = "UPDATE " + table + " SET " +colonnesvaleursString+" "+ whereString;
+            MySqlDataReader reader = commande.ExecuteReader();
+            reader.Read();
+            reader.Close();
             string n = "Les valeurs de la table " + table + " ont bien été modifiées";
             CloseConnection(connexion);
             return n;
@@ -454,7 +464,7 @@ namespace GSBVS
             }
             else
             {
-                whereString += " WHERE " + colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
+                whereString += colonnesConditions[0] + "=" + "'" + valeursConditions[0] + "'";
             }
             return whereString;
         }

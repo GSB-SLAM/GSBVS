@@ -16,7 +16,7 @@ namespace GSBVS
         public bool EntreDates(DateTime premierJour, DateTime deuxiemeJour)
         {
             DateTime today = DateTime.Today;
-            if (premierJour < today && today < deuxiemeJour)
+            if (premierJour <= today && today <= deuxiemeJour)
             {
                 return true;
             }
@@ -37,7 +37,7 @@ namespace GSBVS
         /// <returns></returns>
         public bool EntreDates(DateTime premierJour, DateTime dateTestee, DateTime deuxiemeJour)
         {
-            if (premierJour < dateTestee && dateTestee < deuxiemeJour)
+            if (premierJour <= dateTestee && dateTestee <= deuxiemeJour)
             {
                 return true;
             }
